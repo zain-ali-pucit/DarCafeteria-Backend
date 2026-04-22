@@ -1,0 +1,313 @@
+// Seed data ported from the iOS app's MockData.swift so the backend
+// returns identical content to what the client previously rendered locally.
+
+const categories = [
+  { key: 'Breakfast', name: 'Breakfast', nameAr: 'إفطار', symbolName: 'sun.horizon', sortOrder: 1 },
+  { key: 'Lunch', name: 'Lunch', nameAr: 'غداء', symbolName: 'fork.knife', sortOrder: 2 },
+  { key: 'Dinner', name: 'Dinner', nameAr: 'عشاء', symbolName: 'moon.stars', sortOrder: 3 },
+  { key: 'Snacks', name: 'Snacks', nameAr: 'وجبات خفيفة', symbolName: 'popcorn', sortOrder: 4 },
+  { key: 'Desserts', name: 'Desserts', nameAr: 'حلويات', symbolName: 'birthday.cake', sortOrder: 5 },
+  { key: 'Drinks', name: 'Drinks', nameAr: 'مشروبات', symbolName: 'cup.and.saucer', sortOrder: 6 },
+];
+
+const foodItems = [
+  {
+    name: 'Aloo Paratha Platter',
+    nameAr: 'طبق آلو باراثا',
+    description:
+      'Crispy whole-wheat parathas stuffed with spiced mashed potato, served with homemade yogurt, pickle, and a dollop of white butter. A classic made with love.',
+    descriptionAr:
+      'خبز القمح الكامل المحشو بالبطاطا المهروسة مع التوابل، يُقدَّم مع اللبن البيتي والمخلل وزبدة الجاموس الطازجة. وجبة كلاسيكية مصنوعة بكل محبة.',
+    chefName: 'Ammi Saida',
+    chefNameAr: 'أمي سعيدة',
+    chefAvatarSymbol: 'person.circle.fill',
+    price: 28, categoryKey: 'Breakfast', rating: 4.8, reviewCount: 312, prepTime: 25, servings: 2,
+    ingredients: ['Whole wheat flour', 'Potato', 'Cumin', 'Green chilli', 'Coriander', 'Yogurt', 'Butter'],
+    ingredientsAr: ['دقيق القمح الكامل', 'بطاطا', 'كمون', 'فلفل أخضر', 'كزبرة', 'لبن', 'زبدة'],
+    tags: ['Vegetarian', 'Homestyle', 'Classic'],
+    tagsAr: ['نباتي', 'بيتي', 'كلاسيك'],
+    isPopular: true, isChefSpecial: false,
+    gradientColors: ['F4B860', 'E07A45'], symbolName: 'fork.knife',
+  },
+  {
+    name: 'Desi Omelette & Toast',
+    nameAr: 'أومليت ديسي وتوست',
+    description:
+      'Three-egg omelette loaded with onions, tomatoes, green chillies, and herbs. Served with butter-toasted bread and a cup of doodh patti chai.',
+    descriptionAr:
+      'أومليت ثلاث بيضات محشو بالبصل والطماطم والفلفل الأخضر والأعشاب الطازجة، مع توست مُحمَّص بالزبدة وكوب شاي دافئ.',
+    chefName: 'Baji Nazia',
+    chefNameAr: 'باجي نازية',
+    chefAvatarSymbol: 'person.circle.fill',
+    price: 18, categoryKey: 'Breakfast', rating: 4.6, reviewCount: 198, prepTime: 15, servings: 1,
+    ingredients: ['Eggs', 'Onion', 'Tomato', 'Green chilli', 'Coriander', 'Butter', 'Bread'],
+    ingredientsAr: ['بيض', 'بصل', 'طماطم', 'فلفل أخضر', 'كزبرة', 'زبدة', 'خبز'],
+    tags: ['Protein', 'Quick', 'Homestyle'],
+    tagsAr: ['بروتين', 'سريع', 'بيتي'],
+    isPopular: true, isChefSpecial: false,
+    gradientColors: ['F4D03F', 'F4B860'], symbolName: 'sun.horizon',
+  },
+  {
+    name: 'Halwa Puri Nashta',
+    nameAr: 'حلوى بوري ناشتا',
+    description:
+      'Fluffy deep-fried puris paired with rich semolina halwa and spiced chana — the quintessential Sunday morning breakfast.',
+    descriptionAr:
+      'بوري مقلي هش مع حلوى السميد الغنية وحمص متبَّل. الفطور الكلاسيكي المثالي لصباح الأحد.',
+    chefName: 'Ammi Saida',
+    chefNameAr: 'أمي سعيدة',
+    chefAvatarSymbol: 'person.circle.fill',
+    price: 35, categoryKey: 'Breakfast', rating: 4.9, reviewCount: 456, prepTime: 40, servings: 2,
+    ingredients: ['Refined flour', 'Semolina', 'Sugar', 'Chickpeas', 'Ghee', 'Cardamom'],
+    ingredientsAr: ['دقيق أبيض', 'سميد', 'سكر', 'حمص', 'سمن', 'هيل'],
+    tags: ['Weekend Special', 'Classic', 'Festive'],
+    tagsAr: ['خاص نهاية الأسبوع', 'كلاسيك', 'احتفالي'],
+    isPopular: false, isChefSpecial: true,
+    gradientColors: ['F1C40F', 'E07A45'], symbolName: 'birthday.cake',
+  },
+  {
+    name: 'Karahi Gosht',
+    nameAr: 'كراهي لحم الغنم',
+    description:
+      'Tender mutton slow-cooked in a blazing iron karahi with tomatoes, ginger, garlic, and whole spices. Rich, aromatic, and utterly satisfying.',
+    descriptionAr:
+      'لحم غنم طري مطبوخ ببطء في مقلاة الحديد مع الطماطم والزنجبيل والثوم والتوابل الكاملة. غني وعطري لا يُقاوَم.',
+    chefName: 'Ustad Rafiq',
+    chefNameAr: 'أستاذ رفيق',
+    chefAvatarSymbol: 'person.circle.fill',
+    price: 68, categoryKey: 'Lunch', rating: 4.9, reviewCount: 523, prepTime: 60, servings: 3,
+    ingredients: ['Mutton', 'Tomatoes', 'Ginger', 'Garlic', 'Green chilli', 'Garam masala', 'Oil'],
+    ingredientsAr: ['لحم غنم', 'طماطم', 'زنجبيل', 'ثوم', 'فلفل أخضر', 'بهارات', 'زيت'],
+    tags: ['Non-Veg', 'Spicy', 'Signature'],
+    tagsAr: ['غير نباتي', 'حار', 'مميز'],
+    isPopular: true, isChefSpecial: true,
+    gradientColors: ['C0392B', 'E07A45'], symbolName: 'flame',
+  },
+  {
+    name: 'Daal Chawal Comfort Bowl',
+    nameAr: 'طبق العدس والأرز',
+    description:
+      'Slow-simmered red lentils with a sizzling tarka of garlic and cumin, served over steamed basmati rice. The ultimate soul food.',
+    descriptionAr:
+      'عدس أحمر مطبوخ ببطء مع تتبيلة ساخنة من الثوم والكمون، يُقدَّم على أرز بسمتي مطهو على البخار. غذاء الروح الأصيل.',
+    chefName: 'Baji Nazia',
+    chefNameAr: 'باجي نازية',
+    chefAvatarSymbol: 'person.circle.fill',
+    price: 22, categoryKey: 'Lunch', rating: 4.7, reviewCount: 289, prepTime: 35, servings: 2,
+    ingredients: ['Red lentils', 'Basmati rice', 'Garlic', 'Cumin', 'Tomato', 'Turmeric', 'Ghee'],
+    ingredientsAr: ['عدس أحمر', 'أرز بسمتي', 'ثوم', 'كمون', 'طماطم', 'كركم', 'سمن'],
+    tags: ['Vegetarian', 'Comfort', 'Everyday'],
+    tagsAr: ['نباتي', 'مريح', 'يومي'],
+    isPopular: true, isChefSpecial: false,
+    gradientColors: ['F39C12', '27AE60'], symbolName: 'leaf',
+  },
+  {
+    name: 'Biryani — Dum Style',
+    nameAr: 'برياني دم الأصيل',
+    description:
+      'Fragrant long-grain basmati rice layered with slow-cooked chicken masala, saffron, fried onions, and fresh mint. Sealed and cooked on dum.',
+    descriptionAr:
+      'أرز بسمتي عطري طويل الحبة مطبوخ مع دجاج متبَّل والزعفران والبصل المقلي والنعناع الطازج. مختوم ومطبوخ على الدم.',
+    chefName: 'Ustad Rafiq',
+    chefNameAr: 'أستاذ رفيق',
+    chefAvatarSymbol: 'person.circle.fill',
+    price: 55, categoryKey: 'Lunch', rating: 4.8, reviewCount: 712, prepTime: 75, servings: 3,
+    ingredients: ['Basmati rice', 'Chicken', 'Saffron', 'Fried onions', 'Yogurt', 'Whole spices', 'Mint'],
+    ingredientsAr: ['أرز بسمتي', 'دجاج', 'زعفران', 'بصل مقلي', 'لبن', 'توابل كاملة', 'نعناع'],
+    tags: ['Crowd Favorite', 'Festive', 'Signature'],
+    tagsAr: ['الأكثر طلباً', 'احتفالي', 'مميز'],
+    isPopular: true, isChefSpecial: true,
+    gradientColors: ['8E44AD', 'E07A45'], symbolName: 'star',
+  },
+  {
+    name: 'Saag Gosht',
+    nameAr: 'لحم البقر بالسبانخ',
+    description:
+      'Tender beef chunks simmered with mustard greens, spinach, and aromatic spices. Finished with a generous swirl of fresh cream.',
+    descriptionAr:
+      'قطع لحم بقري طرية مطبوخة مع أوراق الخردل والسبانخ والتوابل العطرية. تُكلَّل بالقشدة الطازجة.',
+    chefName: 'Ammi Saida',
+    chefNameAr: 'أمي سعيدة',
+    chefAvatarSymbol: 'person.circle.fill',
+    price: 62, categoryKey: 'Lunch', rating: 4.6, reviewCount: 178, prepTime: 70, servings: 3,
+    ingredients: ['Beef', 'Mustard greens', 'Spinach', 'Ginger', 'Garlic', 'Cream', 'Spices'],
+    ingredientsAr: ['لحم بقري', 'سبانخ', 'زنجبيل', 'ثوم', 'قشدة', 'توابل'],
+    tags: ['Non-Veg', 'Iron Rich', 'Winter Special'],
+    tagsAr: ['غير نباتي', 'غني بالحديد', 'خاص الشتاء'],
+    isPopular: false, isChefSpecial: false,
+    gradientColors: ['27AE60', '1A8A43'], symbolName: 'leaf.fill',
+  },
+  {
+    name: 'Seekh Kabab Platter',
+    nameAr: 'طبق سيخ كباب',
+    description:
+      'Juicy minced beef seekh kababs, charcoal-grilled to perfection and seasoned with fresh herbs. Served with mint chutney, naan, and sliced onions.',
+    descriptionAr:
+      'كباب لحم مفروم عصيري مشوي على الفحم ومتبَّل بالأعشاب الطازجة، يُقدَّم مع صلصة النعناع والنان والبصل.',
+    chefName: 'Ustad Rafiq',
+    chefNameAr: 'أستاذ رفيق',
+    chefAvatarSymbol: 'person.circle.fill',
+    price: 48, categoryKey: 'Dinner', rating: 4.8, reviewCount: 394, prepTime: 30, servings: 2,
+    ingredients: ['Minced beef', 'Onion', 'Green chilli', 'Coriander', 'Garam masala', 'Ginger', 'Charcoal'],
+    ingredientsAr: ['لحم بقري مفروم', 'بصل', 'فلفل أخضر', 'كزبرة', 'بهارات', 'زنجبيل', 'فحم'],
+    tags: ['Grilled', 'Non-Veg', 'Party Favorite'],
+    tagsAr: ['مشوي', 'غير نباتي', 'مفضل الحفلات'],
+    isPopular: true, isChefSpecial: true,
+    gradientColors: ['922B21', 'C0392B'], symbolName: 'flame.fill',
+  },
+  {
+    name: 'Butter Chicken Handi',
+    nameAr: 'دجاج بالزبدة',
+    description:
+      'Succulent chicken tikka pieces simmered in a velvety tomato-cream sauce with a hint of fenugreek. The perfect balance of spice and richness.',
+    descriptionAr:
+      'قطع دجاج تيكا طرية في صلصة طماطم كريمية ناعمة مع لمسة من الحلبة. توازن مثالي بين التوابل والغنى.',
+    chefName: 'Baji Nazia',
+    chefNameAr: 'باجي نازية',
+    chefAvatarSymbol: 'person.circle.fill',
+    price: 52, categoryKey: 'Dinner', rating: 4.7, reviewCount: 445, prepTime: 45, servings: 2,
+    ingredients: ['Chicken', 'Tomato', 'Cream', 'Fenugreek', 'Butter', 'Cashews', 'Spices'],
+    ingredientsAr: ['دجاج', 'طماطم', 'قشدة', 'حلبة', 'زبدة', 'كاجو', 'توابل'],
+    tags: ['Mild', 'Creamy', 'Popular'],
+    tagsAr: ['معتدل', 'كريمي', 'شائع'],
+    isPopular: true, isChefSpecial: false,
+    gradientColors: ['E07A45', 'F4B860'], symbolName: 'fork.knife',
+  },
+  {
+    name: 'Chicken Pakora Basket',
+    nameAr: 'سلة باكورا الدجاج',
+    description:
+      'Crispy battered chicken pieces marinated in spiced yogurt, deep-fried until golden. Served with a trio of chutneys — tamarind, mint, and garlic.',
+    descriptionAr:
+      'قطع دجاج مقرمشة متبَّلة باللبن والتوابل، مقلية حتى تصبح ذهبية اللون. تُقدَّم مع ثلاث صلصات: تمر هندي ونعناع وثوم.',
+    chefName: 'Baji Nazia',
+    chefNameAr: 'باجي نازية',
+    chefAvatarSymbol: 'person.circle.fill',
+    price: 32, categoryKey: 'Snacks', rating: 4.7, reviewCount: 267, prepTime: 20, servings: 2,
+    ingredients: ['Chicken', 'Gram flour', 'Yogurt', 'Red chilli', 'Cumin', 'Oil', 'Chutney'],
+    ingredientsAr: ['دجاج', 'دقيق الحمص', 'لبن', 'فلفل أحمر', 'كمون', 'زيت', 'صلصة'],
+    tags: ['Crispy', 'Snack', 'Tea-Time'],
+    tagsAr: ['مقرمش', 'وجبة خفيفة', 'وقت الشاي'],
+    isPopular: true, isChefSpecial: false,
+    gradientColors: ['F39C12', 'E07A45'], symbolName: 'popcorn',
+  },
+  {
+    name: 'Samosa Chaat',
+    nameAr: 'شات السمبوسة',
+    description:
+      'Flaky pastry samosas loaded with spiced potato, crushed and dressed with tamarind chutney, yogurt, chaat masala, and fresh coriander.',
+    descriptionAr:
+      'سمبوسة هشة محشوة بالبطاطا المتبَّلة، مسحوقة ومغطاة بصلصة التمر الهندي واللبن وبهار الشات والكزبرة الطازجة.',
+    chefName: 'Ammi Saida',
+    chefNameAr: 'أمي سعيدة',
+    chefAvatarSymbol: 'person.circle.fill',
+    price: 18, categoryKey: 'Snacks', rating: 4.9, reviewCount: 534, prepTime: 15, servings: 1,
+    ingredients: ['Samosa', 'Yogurt', 'Tamarind chutney', 'Chickpeas', 'Chaat masala', 'Coriander'],
+    ingredientsAr: ['سمبوسة', 'لبن', 'صلصة تمر هندي', 'حمص', 'بهار شات', 'كزبرة'],
+    tags: ['Street Food', 'Vegetarian', 'Crowd Fav'],
+    tagsAr: ['طعام الشارع', 'نباتي', 'الأكثر طلباً'],
+    isPopular: true, isChefSpecial: true,
+    gradientColors: ['F4B860', 'E07A45'], symbolName: 'star.fill',
+  },
+  {
+    name: 'Gajar Halwa',
+    nameAr: 'حلوى الجزر',
+    description:
+      'Slow-cooked carrot pudding made with full-fat milk, sugar, ghee, and fragrant cardamom. Garnished with slivered almonds and pistachios.',
+    descriptionAr:
+      'حلوى الجزر المطبوخة ببطء بالحليب الكامل والسكر والسمن والهيل العطري، مزيَّنة باللوز والفستق. تُؤكل دافئة.',
+    chefName: 'Ammi Saida',
+    chefNameAr: 'أمي سعيدة',
+    chefAvatarSymbol: 'person.circle.fill',
+    price: 20, categoryKey: 'Desserts', rating: 4.8, reviewCount: 321, prepTime: 50, servings: 2,
+    ingredients: ['Carrots', 'Milk', 'Sugar', 'Ghee', 'Cardamom', 'Almonds', 'Pistachios'],
+    ingredientsAr: ['جزر', 'حليب كامل', 'سكر', 'سمن', 'هيل', 'لوز', 'فستق'],
+    tags: ['Vegetarian', 'Winter Special', 'Classic'],
+    tagsAr: ['نباتي', 'خاص الشتاء', 'كلاسيك'],
+    isPopular: false, isChefSpecial: true,
+    gradientColors: ['E74C3C', 'F39C12'], symbolName: 'birthday.cake',
+  },
+  {
+    name: 'Kheer — Rose & Pistachio',
+    nameAr: 'خير بالورد والفستق',
+    description:
+      'Creamy rice pudding simmered in full-fat milk, delicately flavored with rose water and cardamom, garnished with pistachios and dried rose petals.',
+    descriptionAr:
+      'حلوى الأرز بالحليب الكامل المعطَّر بماء الورد والهيل، مزيَّنة بالفستق وبتلات الورد المجففة. طعم راقٍ لا يُنسى.',
+    chefName: 'Baji Nazia',
+    chefNameAr: 'باجي نازية',
+    chefAvatarSymbol: 'person.circle.fill',
+    price: 17, categoryKey: 'Desserts', rating: 4.9, reviewCount: 489, prepTime: 60, servings: 2,
+    ingredients: ['Basmati rice', 'Full-fat milk', 'Sugar', 'Rose water', 'Cardamom', 'Pistachios'],
+    ingredientsAr: ['أرز بسمتي', 'حليب كامل', 'سكر', 'ماء ورد', 'هيل', 'فستق'],
+    tags: ['Elegant', 'Vegetarian', 'Festive'],
+    tagsAr: ['راقٍ', 'نباتي', 'احتفالي'],
+    isPopular: true, isChefSpecial: true,
+    gradientColors: ['E91E8C', 'F4B860'], symbolName: 'sparkles',
+  },
+  {
+    name: 'Doodh Patti Chai',
+    nameAr: 'شاي دودح باتي',
+    description:
+      'Strong Pakistani milk tea brewed with loose-leaf black tea and simmered in whole milk with cardamom and ginger. Rich, comforting, and perfectly sweet.',
+    descriptionAr:
+      'شاي باكستاني قوي مطبوخ في الحليب الكامل مع الهيل والزنجبيل. ثري ومريح وحلو على قدّ. كوب لا بد منه كل يوم.',
+    chefName: 'Baji Nazia',
+    chefNameAr: 'باجي نازية',
+    chefAvatarSymbol: 'person.circle.fill',
+    price: 8, categoryKey: 'Drinks', rating: 4.9, reviewCount: 891, prepTime: 10, servings: 1,
+    ingredients: ['Black tea', 'Whole milk', 'Cardamom', 'Ginger', 'Sugar'],
+    ingredientsAr: ['شاي أسود', 'حليب كامل', 'هيل', 'زنجبيل', 'سكر'],
+    tags: ['Hot', 'Classic', 'Daily Essential'],
+    tagsAr: ['ساخن', 'كلاسيك', 'أساسي يومي'],
+    isPopular: true, isChefSpecial: false,
+    gradientColors: ['8D4E2A', 'F4B860'], symbolName: 'cup.and.saucer.fill',
+  },
+  {
+    name: 'Mango Lassi',
+    nameAr: 'لاسي المانجو',
+    description:
+      'Thick, chilled yogurt drink blended with ripe Sindhri mangoes, a pinch of cardamom, and a hint of honey. Refreshing, creamy, and intensely fruity.',
+    descriptionAr:
+      'مشروب زبادي سميك مثلَّج مخلوط بمانجو سيندري ناضجة ورشة هيل وعسل طبيعي. منعش وكريمي ومليء بنكهة المانجو.',
+    chefName: 'Ammi Saida',
+    chefNameAr: 'أمي سعيدة',
+    chefAvatarSymbol: 'person.circle.fill',
+    price: 15, categoryKey: 'Drinks', rating: 4.8, reviewCount: 412, prepTime: 5, servings: 1,
+    ingredients: ['Fresh mango', 'Yogurt', 'Milk', 'Cardamom', 'Honey'],
+    ingredientsAr: ['مانجو طازجة', 'لبن', 'حليب', 'هيل', 'عسل'],
+    tags: ['Cold', 'Seasonal', 'Fresh'],
+    tagsAr: ['بارد', 'موسمي', 'طازج'],
+    isPopular: true, isChefSpecial: false,
+    gradientColors: ['F4B860', 'F39C12'], symbolName: 'drop.fill',
+  },
+];
+
+const banners = [
+  {
+    taglineKey: 'banner.tagline.signature',
+    titleKey: 'banner.title.taste',
+    subtitleKey: 'banner.sub.biryani',
+    gradientColors: ['8E44AD', 'E07A45'],
+    symbolName: 'star.fill',
+    sortOrder: 1,
+  },
+  {
+    taglineKey: 'banner.tagline.offer',
+    titleKey: 'banner.title.delivery',
+    subtitleKey: 'banner.sub.delivery',
+    gradientColors: ['E07A45', 'F4B860'],
+    symbolName: 'bicycle',
+    sortOrder: 2,
+  },
+  {
+    taglineKey: 'banner.tagline.weekend',
+    titleKey: 'banner.title.weekend',
+    subtitleKey: 'banner.sub.weekend',
+    gradientColors: ['F1C40F', 'E07A45'],
+    symbolName: 'sun.max.fill',
+    sortOrder: 3,
+  },
+];
+
+module.exports = { categories, foodItems, banners };

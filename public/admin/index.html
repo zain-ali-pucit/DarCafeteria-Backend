@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dar Cafeteria — Admin</title>
+
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  />
+  <link rel="stylesheet" href="/admin/css/admin.css" />
+</head>
+<body>
+
+  <!-- LOGIN SCREEN -->
+  <div id="login-screen" class="login-wrap d-none">
+    <div class="login-card">
+      <div class="text-center mb-4">
+        <div class="brand-logo mx-auto mb-3">
+          <i class="fa-solid fa-utensils"></i>
+        </div>
+        <h3 class="mb-1">Dar Cafeteria</h3>
+        <p class="text-muted mb-0">Admin Panel</p>
+      </div>
+      <form id="login-form">
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" id="login-email" required autocomplete="username" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input type="password" class="form-control" id="login-password" required autocomplete="current-password" />
+        </div>
+        <div id="login-error" class="alert alert-danger d-none py-2 small"></div>
+        <button type="submit" class="btn btn-primary w-100" id="login-submit">
+          <span class="btn-label">Sign In</span>
+          <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div id="app-shell" class="d-none">
+    <!-- Sidebar -->
+    <nav id="sidebar" class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo"><i class="fa-solid fa-utensils"></i></div>
+        <div>
+          <div class="brand-title">Dar Cafeteria</div>
+          <div class="brand-sub">Admin</div>
+        </div>
+      </div>
+      <ul class="nav flex-column sidebar-nav">
+        <li><a href="#/dashboard"  data-route="dashboard"><i class="fa-solid fa-gauge-high"></i> Dashboard</a></li>
+        <li><a href="#/orders"     data-route="orders"><i class="fa-solid fa-receipt"></i> Orders</a></li>
+        <li><a href="#/foods"      data-route="foods"><i class="fa-solid fa-bowl-food"></i> Menu / Foods</a></li>
+        <li><a href="#/categories" data-route="categories"><i class="fa-solid fa-tags"></i> Categories</a></li>
+        <li><a href="#/banners"    data-route="banners"><i class="fa-solid fa-images"></i> Banners</a></li>
+        <li><a href="#/users"      data-route="users"><i class="fa-solid fa-users"></i> Users</a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <div class="user-card" id="current-user-card">
+          <div class="avatar" id="current-user-avatar">A</div>
+          <div class="meta">
+            <div class="name" id="current-user-name">—</div>
+            <div class="email text-muted small" id="current-user-email">—</div>
+          </div>
+        </div>
+        <button class="btn btn-outline-light btn-sm w-100 mt-2" id="logout-btn">
+          <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+        </button>
+      </div>
+    </nav>
+
+    <!-- Main content -->
+    <main class="main-content">
+      <header class="topbar">
+        <button class="btn btn-light btn-sm d-lg-none" id="sidebar-toggle">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <h4 class="page-title mb-0" id="page-title">Dashboard</h4>
+        <div class="ms-auto d-flex align-items-center gap-2">
+          <span class="badge rounded-pill bg-success-subtle text-success-emphasis">
+            <i class="fa-solid fa-circle fa-2xs"></i> Live
+          </span>
+        </div>
+      </header>
+
+      <section id="view-container" class="view-container">
+        <div class="text-center py-5 text-muted">
+          <div class="spinner-border" role="status"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Toast host -->
+  <div class="toast-container position-fixed top-0 end-0 p-3" id="toast-host" style="z-index:1080"></div>
+
+  <!-- Modal host -->
+  <div class="modal fade" id="app-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="app-modal-title">Modal</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="app-modal-body"></div>
+        <div class="modal-footer" id="app-modal-footer"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/admin/js/api.js"></script>
+  <script src="/admin/js/ui.js"></script>
+  <script src="/admin/js/auth.js"></script>
+  <script src="/admin/js/views/dashboard.js"></script>
+  <script src="/admin/js/views/orders.js"></script>
+  <script src="/admin/js/views/foods.js"></script>
+  <script src="/admin/js/views/categories.js"></script>
+  <script src="/admin/js/views/banners.js"></script>
+  <script src="/admin/js/views/users.js"></script>
+  <script src="/admin/js/app.js"></script>
+</body>
+</html>
