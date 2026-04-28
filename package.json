@@ -8,7 +8,9 @@
     "dev": "nodemon src/server.js",
     "db:migrate": "node src/db/migrate.js",
     "db:seed": "node src/db/seed.js",
-    "db:reset": "node src/db/migrate.js && node src/db/seed.js"
+    "db:reset": "node src/db/migrate.js && node src/db/seed.js",
+    "db:unify-chef": "node src/db/unify-chef.js",
+    "db:rename-super-admin": "node src/db/rename-super-admin.js"
   },
   "keywords": [
     "dar-cafeteria",
@@ -26,6 +28,7 @@
     "express": "^4.19.2",
     "express-rate-limit": "^7.4.0",
     "express-validator": "^7.2.0",
+    "firebase-admin": "^12.4.0",
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",

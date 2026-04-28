@@ -1,8 +1,9 @@
 (function () {
   window.Views = window.Views || {};
 
-  // Customers-only view. Admin + staff are managed in their own pages so
-  // this list stays focussed on the people who actually order food.
+  // Admin-side management for `role = 'staff'` users (riders). Staff don't
+  // sign in to this admin panel — they use the Android app — so this view
+  // is purely about creating/editing/deactivating their accounts.
   let state = { search: '' };
 
   async function render() {
@@ -10,35 +11,39 @@
     container.innerHTML = `
       <div class="panel">
         <div class="panel-header">
-          <h5 class="panel-title"><i class="fa-solid fa-users me-2"></i> Customers</h5>
+          <h5 class="panel-title"><i class="fa-solid fa-motorcycle me-2"></i> Staff</h5>
           <div class="ms-auto d-flex gap-2 flex-wrap">
-            <input type="search" id="user-search" class="form-control form-control-sm" placeholder="Search name/email/phone" value="${UI.escape(state.search)}" style="min-width:240px" />
-            <button class="btn btn-sm btn-primary" id="user-create"><i class="fa-solid fa-plus"></i> New customer</button>
+            <input type="search" id="staff-search" class="form-control form-control-sm" placeholder="Search name/email/phone" value="${UI.escape(state.search)}" style="min-width:240px" />
+            <button class="btn btn-sm btn-primary" id="staff-create"><i class="fa-solid fa-plus"></i> New staff</button>
           </div>
         </div>
-        <div id="user-body"></div>
+        <div id="staff-body"></div>
       </div>
     `;
 
     let searchT;
-    document.getElementById('user-search').addEventListener('input', (e) => {
+    document.getElementById('staff-search').addEventListener('input', (e) => {
       clearTimeout(searchT);
       searchT = setTimeout(() => { state.search = e.target.value; loadTable(); }, 300);
     });
-    document.getElementById('user-create').addEventListener('click', () => openCreateForm());
+    document.getElementById('staff-create').addEventListener('click', () => openCreateForm());
 
     await loadTable();
   }
 
   async function loadTable() {
-    const body = document.getElementById('user-body');
+    const body = document.getElementById('staff-body');
     UI.setLoading(body);
-    const q = { role: 'customer' };
+    const q = { role: 'staff' };
     if (state.search) q.search = state.search;
     const { users } = await Api.listUsers(q);
 
     if (!users.length) {
-      body.innerHTML = UI.emptyState('fa-users', 'No customers', '');
+      body.innerHTML = UI.emptyState(
+        'fa-motorcycle',
+        'No staff yet',
+        'Create a rider account so they can sign into the Android app.'
+      );
       return;
     }
 
@@ -60,13 +65,6 @@
       </div>
     `;
 
-    bindRowActions(body);
-  }
-
-  function bindRowActions(body) {
-    body.querySelectorAll('[data-view]').forEach((btn) => {
-      btn.addEventListener('click', () => openDetail(btn.dataset.view));
-    });
     body.querySelectorAll('[data-edit]').forEach((btn) => {
       btn.addEventListener('click', () => openEditForm(btn.dataset.edit));
     });
@@ -82,14 +80,15 @@
   }
 
   function row(u) {
-    const me = Api.getUser();
-    const isSelf = me && me.id === u.id;
     return `
       <tr>
         <td>
           <div class="d-flex align-items-center gap-2">
             <div class="user-card"><div class="avatar">${UI.escape((u.fullName || u.email || '?').charAt(0).toUpperCase())}</div></div>
-            <div><strong>${UI.escape(u.fullName)}</strong>${isSelf ? ' <span class="chip primary">you</span>' : ''}</div>
+            <div>
+              <strong>${UI.escape(u.fullName)}</strong>
+              <span class="chip primary">staff</span>
+            </div>
           </div>
         </td>
         <td>${UI.escape(u.email)}</td>
@@ -97,15 +96,12 @@
         <td>${u.isActive ? '<span class="chip success">Active</span>' : '<span class="chip danger">Disabled</span>'}</td>
         <td class="text-nowrap-cell small text-muted">${UI.formatDate(u.joinDate || u.createdAt)}</td>
         <td class="text-nowrap-cell">
-          <button class="btn btn-sm btn-light" data-view="${u.id}">View</button>
           <button class="btn btn-sm btn-light" data-edit="${u.id}"><i class="fa-solid fa-pen"></i></button>
           <button class="btn btn-sm btn-light" data-reset="${u.id}" data-name="${UI.escape(u.fullName)}"><i class="fa-solid fa-key"></i></button>
-          ${!isSelf ? `
-            <button class="btn btn-sm btn-light" data-toggle-active="${u.id}" data-value="${u.isActive}">
-              <i class="fa-solid ${u.isActive ? 'fa-user-slash' : 'fa-user-check'}"></i>
-            </button>
-            <button class="btn btn-sm btn-outline-danger" data-delete="${u.id}" data-name="${UI.escape(u.fullName)}"><i class="fa-solid fa-trash"></i></button>
-          ` : ''}
+          <button class="btn btn-sm btn-light" data-toggle-active="${u.id}" data-value="${u.isActive}">
+            <i class="fa-solid ${u.isActive ? 'fa-user-slash' : 'fa-user-check'}"></i>
+          </button>
+          <button class="btn btn-sm btn-outline-danger" data-delete="${u.id}" data-name="${UI.escape(u.fullName)}"><i class="fa-solid fa-trash"></i></button>
         </td>
       </tr>
     `;
@@ -114,15 +110,15 @@
   async function toggleActive(id, current) {
     try {
       await Api.updateUser(id, { isActive: !current });
-      UI.toast(current ? 'User disabled' : 'User activated');
+      UI.toast(current ? 'Staff disabled' : 'Staff activated');
       loadTable();
     } catch (err) { UI.toast(err.message, 'danger'); }
   }
 
   async function remove(id, name) {
-    const ok = await UI.confirm('Delete customer', `Delete "${name}"? This also removes their orders.`, 'Delete');
+    const ok = await UI.confirm('Remove staff', `Remove staff "${name}"? Their past order pickups stay in history.`, 'Remove');
     if (!ok) return;
-    try { await Api.deleteUser(id); UI.toast('Deleted'); loadTable(); }
+    try { await Api.deleteUser(id); UI.toast('Staff removed'); loadTable(); }
     catch (err) { UI.toast(err.message, 'danger'); }
   }
 
@@ -143,68 +139,13 @@
     });
   }
 
-  async function openDetail(id) {
-    const { user, stats } = await Api.getUser(id);
-    const orders = user.orders || [];
-    UI.renderModal({
-      title: user.fullName,
-      bodyHtml: `
-        <div class="row g-3">
-          <div class="col-md-6">
-            <div class="small text-muted">Email</div>
-            <div>${UI.escape(user.email)}</div>
-          </div>
-          <div class="col-md-6">
-            <div class="small text-muted">Phone</div>
-            <div>${UI.escape(user.phone || '—')}</div>
-          </div>
-          <div class="col-md-6">
-            <div class="small text-muted">Address</div>
-            <div>${UI.escape(user.address || '—')}</div>
-          </div>
-          <div class="col-md-6">
-            <div class="small text-muted">Joined</div>
-            <div>${UI.formatDate(user.joinDate || user.createdAt)}</div>
-          </div>
-        </div>
-
-        <div class="row g-3 mt-1">
-          <div class="col-4"><div class="stat-card"><div class="label">Orders</div><div class="value">${stats.totalOrders}</div></div></div>
-          <div class="col-4"><div class="stat-card"><div class="label">Spent</div><div class="value">${UI.money(stats.totalSpent)}</div></div></div>
-          <div class="col-4"><div class="stat-card"><div class="label">Favorites</div><div class="value">${stats.favoritesCount}</div></div></div>
-        </div>
-
-        <h6 class="form-section-title">Recent orders</h6>
-        ${
-          orders.length
-            ? `<div class="table-responsive"><table class="table">
-                <thead><tr><th>Order</th><th>Total</th><th>Status</th><th>Placed</th></tr></thead>
-                <tbody>
-                  ${orders.map((o) => `
-                    <tr>
-                      <td><strong>${UI.escape(o.orderNumber)}</strong></td>
-                      <td>${UI.money(o.total)}</td>
-                      <td>${UI.statusChip(o.status)}</td>
-                      <td class="small text-muted">${UI.formatDate(o.placedAt)}</td>
-                    </tr>
-                  `).join('')}
-                </tbody>
-              </table></div>`
-            : '<p class="text-muted">No orders yet.</p>'
-        }
-      `,
-    });
-  }
-
   async function openEditForm(id) {
     const { user } = await Api.getUser(id);
-    const me = Api.getUser();
-    const isSelf = me && me.id === user.id;
 
     const bodyHtml = `
       <div class="row g-3">
         <div class="col-md-6">
-          <label class="form-label">Full name</label>
+          <label class="form-label">Full name *</label>
           <input name="fullName" class="form-control" required value="${UI.escape(user.fullName)}" />
         </div>
         <div class="col-md-6">
@@ -217,28 +158,25 @@
         </div>
         <div class="col-12 d-flex">
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" name="isActive" ${user.isActive ? 'checked' : ''} ${isSelf ? 'disabled' : ''} />
-            <label class="form-check-label">Active</label>
+            <input class="form-check-input" type="checkbox" name="isActive" ${user.isActive ? 'checked' : ''} />
+            <label class="form-check-label">Active (can sign into the staff app)</label>
           </div>
         </div>
       </div>
     `;
 
     await UI.openForm({
-      title: 'Edit customer',
+      title: 'Edit staff',
       bodyHtml,
       submitLabel: 'Save changes',
       onSubmit: async (form) => {
-        const data = {
+        await Api.updateUser(id, {
           fullName: form.querySelector('[name=fullName]').value.trim(),
           phone: form.querySelector('[name=phone]').value.trim() || null,
           address: form.querySelector('[name=address]').value.trim() || null,
-        };
-        if (!isSelf) {
-          data.isActive = form.querySelector('[name=isActive]').checked;
-        }
-        await Api.updateUser(id, data);
-        UI.toast('Customer updated');
+          isActive: form.querySelector('[name=isActive]').checked,
+        });
+        UI.toast('Staff updated');
         loadTable();
       },
     });
@@ -249,11 +187,11 @@
       <div class="row g-3">
         <div class="col-md-6">
           <label class="form-label">Full name *</label>
-          <input name="fullName" class="form-control" required />
+          <input name="fullName" class="form-control" required placeholder="Khalid Al-Mansouri" />
         </div>
         <div class="col-md-6">
           <label class="form-label">Email *</label>
-          <input name="email" type="email" class="form-control" required />
+          <input name="email" type="email" class="form-control" required placeholder="rider@darcafeteria.qa" />
         </div>
         <div class="col-md-6">
           <label class="form-label">Phone</label>
@@ -265,14 +203,17 @@
         </div>
         <div class="col-12">
           <label class="form-label">Address</label>
-          <input name="address" class="form-control" />
+          <input name="address" class="form-control" placeholder="Doha, Qatar" />
+        </div>
+        <div class="col-12 small text-muted">
+          The new staff member can sign into the Android app with this email and password.
         </div>
       </div>
     `;
     await UI.openForm({
-      title: 'New customer',
+      title: 'New staff',
       bodyHtml,
-      submitLabel: 'Create customer',
+      submitLabel: 'Create staff',
       onSubmit: async (form) => {
         await Api.createUser({
           fullName: form.querySelector('[name=fullName]').value.trim(),
@@ -280,13 +221,14 @@
           password: form.querySelector('[name=password]').value,
           phone: form.querySelector('[name=phone]').value.trim() || null,
           address: form.querySelector('[name=address]').value.trim() || null,
-          role: 'customer',
+          role: 'staff',
+          avatarSymbol: 'figure.outdoor.cycle',
         });
-        UI.toast('Customer created');
+        UI.toast('Staff created');
         loadTable();
       },
     });
   }
 
-  Views.Users = { render };
+  Views.Staff = { render };
 })();

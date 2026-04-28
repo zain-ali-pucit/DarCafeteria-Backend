@@ -88,9 +88,17 @@ exports.stats = asyncHandler(async (req, res) => {
 
 // --- Users
 
+// The bootstrap super admin (created by `npm run db:seed`). Hidden from the
+// admin-panel users list so other admins can't accidentally edit / delete /
+// reset-password the root account. The user can still sign in and manage
+// the system normally — they just don't appear in the management table.
+const SUPER_ADMIN_EMAIL = 'admin@darcafeteria.com';
+
 exports.listUsers = asyncHandler(async (req, res) => {
   const { search, role } = req.query;
-  const where = {};
+  const where = {
+    email: { [Op.ne]: SUPER_ADMIN_EMAIL },
+  };
   if (role) where.role = role;
   if (search) {
     const term = `%${search}%`;
@@ -175,4 +183,38 @@ exports.deleteUser = asyncHandler(async (req, res) => {
   if (!user) throw ApiError.notFound('User not found');
   await user.destroy();
   res.json({ success: true, data: { message: 'User deleted' } });
+});
+
+/**
+ * POST /admin/users
+ * Body: { fullName, email, password, role?, phone?, address?, avatarSymbol?, isActive? }
+ *
+ * Lets admins seed a new user directly — used to create staff (riders) so
+ * they can sign into the Android app without first registering as a
+ * customer and having their role flipped.
+ */
+exports.createUser = asyncHandler(async (req, res) => {
+  const { fullName, email, password, role, phone, address, avatarSymbol, isActive } = req.body;
+  if (!fullName || !email || !password) {
+    throw ApiError.badRequest('fullName, email and password are required');
+  }
+  if (password.length < 6) {
+    throw ApiError.badRequest('Password must be at least 6 characters');
+  }
+  const existing = await User.findOne({ where: { email } });
+  if (existing) throw ApiError.conflict('A user with this email already exists');
+
+  const user = User.build({
+    fullName,
+    email,
+    role: role || 'customer',
+    phone: phone || null,
+    address: address || null,
+    avatarSymbol: avatarSymbol || 'person.circle.fill',
+    isActive: isActive !== false,
+  });
+  await user.setPassword(password);
+  await user.save();
+
+  res.status(201).json({ success: true, data: { user } });
 });

@@ -3,6 +3,7 @@ const { body, param } = require('express-validator');
 const validate = require('../middleware/validate');
 const { authenticate } = require('../middleware/auth');
 const userController = require('../controllers/userController');
+const fcmTokenController = require('../controllers/fcmTokenController');
 
 const router = express.Router();
 
@@ -81,6 +82,24 @@ router.delete(
   [param('id').isUUID()],
   validate,
   userController.deleteAddress
+);
+
+// FCM device tokens — clients call these on token refresh / sign-out.
+router.post(
+  '/fcm-token',
+  [
+    body('token').isString().isLength({ min: 32, max: 4096 }),
+    body('platform').optional().isIn(['android', 'ios', 'web']),
+    body('appVersion').optional({ nullable: true }).isString().isLength({ max: 40 }),
+  ],
+  validate,
+  fcmTokenController.registerToken
+);
+router.delete(
+  '/fcm-token',
+  [body('token').isString().isLength({ min: 32, max: 4096 })],
+  validate,
+  fcmTokenController.unregisterToken
 );
 
 module.exports = router;

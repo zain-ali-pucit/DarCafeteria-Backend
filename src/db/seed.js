@@ -58,9 +58,9 @@ async function run() {
       avatarSymbol: 'person.crop.circle.fill.badge.checkmark',
       isActive: true,
     },
-    'DarCafeteria11223344'
+    'Darcafeteria11223344'
   );
-  console.log('  ✓ primary admin (admin@darcafeteria.com / DarCafeteria11223344)');
+  console.log('  ✓ primary admin (admin@darcafeteria.com / Darcafeteria11223344)');
 
   await upsertUser(
     'admin@darcafeteria.qa',
@@ -87,6 +87,20 @@ async function run() {
     'guest123'
   );
   console.log('  ✓ guest user (guest@darcafeteria.qa / guest123)');
+
+  await upsertUser(
+    'rider@darcafeteria.qa',
+    {
+      fullName: 'Khalid Al-Mansouri',
+      role: 'staff',
+      phone: '+974 5555 1234',
+      address: 'Doha, Qatar',
+      avatarSymbol: 'figure.outdoor.cycle',
+      isActive: true,
+    },
+    'rider123'
+  );
+  console.log('  ✓ demo staff/rider (rider@darcafeteria.qa / rider123)');
 
   await sequelize.close();
   console.log('Done.');

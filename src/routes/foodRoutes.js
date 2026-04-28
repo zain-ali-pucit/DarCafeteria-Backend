@@ -15,6 +15,7 @@ router.get(
     query('search').optional().isString(),
     query('popular').optional().isBoolean(),
     query('chefSpecial').optional().isBoolean(),
+    query('includeUnavailable').optional().isBoolean(),
     query('page').optional().isInt({ min: 1 }),
     query('limit').optional().isInt({ min: 1, max: 100 }),
   ],
@@ -51,8 +52,10 @@ router.post(
     body('nameAr').isString().isLength({ min: 1, max: 160 }),
     body('description').isString(),
     body('descriptionAr').isString(),
-    body('chefName').isString().isLength({ min: 1, max: 120 }),
-    body('chefNameAr').isString().isLength({ min: 1, max: 120 }),
+    // chefName / chefNameAr are auto-defaulted server-side ("Dar") — every
+    // dish on the menu is "by Dar", so admins don't need to fill them in.
+    body('chefName').optional().isString().isLength({ max: 120 }),
+    body('chefNameAr').optional().isString().isLength({ max: 120 }),
     body('price').isFloat({ min: 0 }),
     body('categoryKey').isString(),
   ],

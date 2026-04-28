@@ -46,6 +46,7 @@
     Confirmed: 'info',
     Preparing: 'primary',
     Ready: 'info',
+    PickedUp: 'primary',
     Delivered: 'success',
     Cancelled: 'danger',
   };

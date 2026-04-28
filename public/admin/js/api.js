@@ -61,6 +61,7 @@
       return this.get(`/admin/users${qs ? '?' + qs : ''}`);
     },
     getUser(id) { return this.get(`/admin/users/${id}`); },
+    createUser(body) { return this.post('/admin/users', body); },
     updateUser(id, body) { return this.patch(`/admin/users/${id}`, body); },
     resetUserPassword(id, newPassword) {
       return this.post(`/admin/users/${id}/reset-password`, { newPassword });
@@ -98,6 +99,11 @@
     updateOrderStatus(id, status, note) {
       return this.patch(`/orders/${id}/status`, { status, note });
     },
+
+    // Notifications
+    listNotifications() { return this.get('/admin/notifications'); },
+    fcmTokenStats()    { return this.get('/admin/fcm-tokens'); },
+    sendNotification(body) { return this.post('/admin/notifications/send', body); },
   };
 
   window.Api = Api;

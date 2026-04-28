@@ -2,6 +2,7 @@
   const Auth = {
     async attemptLogin(email, password) {
       const { user, token } = await Api.login(email, password);
+      // Admin-only sign-in. Staff/riders use the Android app instead.
       if (user.role !== 'admin') {
         Api.clearToken();
         throw new Error('This account does not have admin access');

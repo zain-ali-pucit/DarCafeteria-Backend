@@ -9,6 +9,8 @@ const OrderItem = require('./OrderItem');
 const OrderStatusHistory = require('./OrderStatusHistory');
 const Banner = require('./Banner');
 const Address = require('./Address');
+const FcmToken = require('./FcmToken');
+const Notification = require('./Notification');
 
 // Associations
 User.hasMany(Favorite, { foreignKey: 'userId', as: 'favorites', onDelete: 'CASCADE' });
@@ -60,6 +62,21 @@ FoodItem.belongsTo(Category, {
   as: 'category',
 });
 
+// FCM tokens — a user can have many devices; each token row may also be
+// orphaned (userId null) for guests. Cascade-delete tokens with the user.
+User.hasMany(FcmToken, {
+  foreignKey: 'userId',
+  as: 'fcmTokens',
+  onDelete: 'CASCADE',
+});
+FcmToken.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+
+// Notifications keep a soft pointer to the admin who sent them so we can
+// show "sent by Sarah" in the audit log; deleting the admin doesn't remove
+// the history.
+User.hasMany(Notification, { foreignKey: 'sentByUserId', as: 'sentNotifications' });
+Notification.belongsTo(User, { foreignKey: 'sentByUserId', as: 'sentBy' });
+
 module.exports = {
   sequelize,
   User,
@@ -71,4 +88,6 @@ module.exports = {
   OrderStatusHistory,
   Banner,
   Address,
+  FcmToken,
+  Notification,
 };

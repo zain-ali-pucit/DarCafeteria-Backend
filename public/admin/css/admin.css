@@ -339,3 +339,90 @@ html, body {
   .sidebar.open { left: 0; }
   .main-content { width: 100%; }
 }
+
+/* ─── Staff Panel ──────────────────────────────────────────────────────── */
+
+.staff-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #e9ecef;
+}
+.staff-tabs button {
+  background: transparent;
+  border: 0;
+  padding: 10px 16px;
+  font-weight: 500;
+  color: #6c757d;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.staff-tabs button .count-pill {
+  background: #e9ecef;
+  border-radius: 999px;
+  padding: 2px 9px;
+  font-size: 11px;
+  color: #495057;
+  font-weight: 600;
+}
+.staff-tabs button.active {
+  color: #c0392b;
+  border-bottom-color: #c0392b;
+}
+.staff-tabs button.active .count-pill {
+  background: #fde2dd;
+  color: #c0392b;
+}
+
+.order-card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.order-card:hover { box-shadow: 0 6px 22px rgba(0,0,0,0.06); }
+.order-card .meta { font-size: 12px; color: #8a8a8a; }
+.order-card h6 { margin: 0 0 4px; font-weight: 700; }
+.order-card .items { font-size: 13px; color: #555; }
+.order-card .rider-line {
+  font-size: 12px;
+  color: #6c757d;
+  background: #f5f5f5;
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-top: 8px;
+}
+.order-card .rider-line strong { color: #333; }
+
+/* Flash animation when a new order shows up — yellow glow that fades. */
+@keyframes orderFlash {
+  0%   { background: #fff8d6; box-shadow: 0 0 0 4px rgba(244, 184, 96, 0.55); }
+  60%  { background: #fffced; box-shadow: 0 0 0 8px rgba(244, 184, 96, 0.2); }
+  100% { background: #fff;    box-shadow: none; }
+}
+.order-card.flash {
+  animation: orderFlash 2.6s ease-out;
+}
+
+/* Stronger highlight when arrived via deep link (notification tap). */
+@keyframes orderHighlight {
+  0%, 50% {
+    background: #fff8d6;
+    box-shadow: 0 0 0 6px rgba(224, 122, 69, 0.45);
+    transform: scale(1.015);
+  }
+  100% {
+    background: #fff;
+    box-shadow: none;
+    transform: scale(1);
+  }
+}
+.order-card.highlight {
+  animation: orderHighlight 3s ease-out;
+}

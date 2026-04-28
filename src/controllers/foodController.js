@@ -25,7 +25,13 @@ exports.list = asyncHandler(async (req, res) => {
   const { category, search, popular, chefSpecial } = req.query;
   const { page, limit, offset } = parsePagination(req.query);
 
-  const where = { isAvailable: true };
+  const where = {};
+  // Public callers only see available items. Admins can opt out of that
+  // filter by passing ?includeUnavailable=true so they can re-enable
+  // items they've previously hidden.
+  const adminWantsAll =
+    req.query.includeUnavailable === 'true' && req.user && req.user.role === 'admin';
+  if (!adminWantsAll) where.isAvailable = true;
   if (category && category.toLowerCase() !== 'all') where.categoryKey = category;
   if (popular === 'true') where.isPopular = true;
   if (chefSpecial === 'true') where.isChefSpecial = true;
@@ -106,15 +112,29 @@ exports.search = asyncHandler(async (req, res) => {
   res.json({ success: true, data: { items: data } });
 });
 
+// Every dish is "by Dar" — there's only one chef in the brand. We force
+// these values on every write so the data stays clean even if a client
+// (or seed script) sends something else.
+const CHEF_NAME_EN = 'Dar';
+const CHEF_NAME_AR = 'دار';
+
 exports.create = asyncHandler(async (req, res) => {
-  const item = await FoodItem.create(req.body);
+  const item = await FoodItem.create({
+    ...req.body,
+    chefName: CHEF_NAME_EN,
+    chefNameAr: CHEF_NAME_AR,
+  });
   res.status(201).json({ success: true, data: { item } });
 });
 
 exports.update = asyncHandler(async (req, res) => {
   const item = await FoodItem.findByPk(req.params.id);
   if (!item) throw ApiError.notFound('Food item not found');
-  await item.update(req.body);
+  // Strip any chef overrides — they're always "Dar".
+  const payload = { ...req.body };
+  delete payload.chefName;
+  delete payload.chefNameAr;
+  await item.update(payload);
   res.json({ success: true, data: { item } });
 });
 

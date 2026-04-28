@@ -9,6 +9,7 @@ const ApiError = require('../utils/ApiError');
 const asyncHandler = require('../utils/asyncHandler');
 const { computeDeliveryFee, toMoney } = require('../utils/pricing');
 const { generateOrderNumber } = require('../utils/orderNumber');
+const { notifyStaffNewOrder } = require('../services/staffNotifications');
 
 const ACTIVE_STATUSES = ['Pending', 'Confirmed', 'Preparing', 'Ready'];
 const TERMINAL_STATUSES = ['Delivered', 'Cancelled'];
@@ -91,6 +92,12 @@ exports.create = asyncHandler(async (req, res) => {
   });
 
   const full = await Order.findByPk(order.id, { include: includeItems() });
+
+  // Fire-and-forget push to every active staff/admin device. Failure here
+  // must never break the order placement, so the promise is detached and
+  // the error is swallowed.
+  notifyStaffNewOrder(full, req.user).catch(() => {});
+
   res.status(201).json({ success: true, data: { order: full } });
 });
 

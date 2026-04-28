@@ -3,17 +3,19 @@
     currentView: null,
 
     routes: {
-      dashboard: { title: 'Dashboard', render: () => Views.Dashboard.render() },
-      orders:    { title: 'Orders',    render: () => Views.Orders.render() },
-      foods:     { title: 'Menu / Foods', render: () => Views.Foods.render() },
-      categories:{ title: 'Categories', render: () => Views.Categories.render() },
-      banners:   { title: 'Banners',   render: () => Views.Banners.render() },
-      users:     { title: 'Users',     render: () => Views.Users.render() },
+      dashboard:     { title: 'Dashboard',     render: () => Views.Dashboard.render() },
+      orders:        { title: 'Orders',        render: () => Views.Orders.render() },
+      foods:         { title: 'Menu / Foods',  render: () => Views.Foods.render() },
+      categories:    { title: 'Categories',    render: () => Views.Categories.render() },
+      banners:       { title: 'Banners',       render: () => Views.Banners.render() },
+      users:         { title: 'Customers',     render: () => Views.Users.render() },
+      staff:         { title: 'Staff',         render: () => Views.Staff.render() },
+      notifications: { title: 'Notifications', render: () => Views.Notifications.render() },
     },
 
     async renderCurrentRoute() {
       const hash = location.hash || '#/dashboard';
-      const [, route, ...rest] = hash.split('/');
+      const [, route] = hash.split('/');
       const def = this.routes[route] || this.routes.dashboard;
 
       document.getElementById('page-title').textContent = def.title;
@@ -24,7 +26,7 @@
       const container = document.getElementById('view-container');
       UI.setLoading(container);
       try {
-        await def.render(container, rest);
+        await def.render(container);
       } catch (err) {
         if (err && err.status === 401) return;
         container.innerHTML = `
@@ -44,7 +46,6 @@
     },
 
     async bootApp() {
-      // Verify token is still valid and user is admin
       try {
         const { user } = await Api.me();
         if (user.role !== 'admin') {

@@ -44,7 +44,9 @@
   async function loadTable() {
     const body = document.getElementById('foods-body');
     UI.setLoading(body);
-    const q = { limit: 100 };
+    // Admins need to see disabled items so they can re-enable them. The
+    // backend honours this flag only for admin role.
+    const q = { limit: 100, includeUnavailable: 'true' };
     if (state.categoryFilter) q.category = state.categoryFilter;
     if (state.search) q.search = state.search;
     const { items } = await Api.listFoods(q);
@@ -61,7 +63,6 @@
             <tr>
               <th></th>
               <th>Name</th>
-              <th>Chef</th>
               <th>Category</th>
               <th class="text-end">Price</th>
               <th>Rating</th>
@@ -95,7 +96,6 @@
           <strong>${UI.escape(f.name)}</strong><br/>
           <small class="text-muted">${UI.escape(f.nameAr || '')}</small>
         </td>
-        <td>${UI.escape(f.chefName)}</td>
         <td><span class="chip neutral">${UI.escape(f.categoryKey)}</span></td>
         <td class="text-end text-nowrap-cell">${UI.money(f.price)}</td>
         <td><i class="fa-solid fa-star text-warning"></i> ${Number(f.rating || 0).toFixed(1)} <small class="text-muted">(${f.reviewCount || 0})</small></td>
@@ -153,13 +153,11 @@
           <input name="nameAr" class="form-control" required dir="rtl" value="${UI.escape(item ? item.nameAr : '')}" />
         </div>
 
-        <div class="col-md-6">
-          <label class="form-label">Chef (English) *</label>
-          <input name="chefName" class="form-control" required value="${UI.escape(item ? item.chefName : '')}" />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Chef (Arabic) *</label>
-          <input name="chefNameAr" class="form-control" required dir="rtl" value="${UI.escape(item ? item.chefNameAr : '')}" />
+        <div class="col-12">
+          <div class="alert alert-light border d-flex align-items-center mb-0 py-2">
+            <i class="fa-solid fa-utensils me-2 text-primary"></i>
+            <span class="small text-muted">All dishes are prepared by <strong>Dar</strong> (دار). The chef field is fixed brand-wide.</span>
+          </div>
         </div>
 
         <div class="col-12">
@@ -269,8 +267,7 @@
     return {
       name: v('name'),
       nameAr: v('nameAr'),
-      chefName: v('chefName'),
-      chefNameAr: v('chefNameAr'),
+      // chefName / chefNameAr are auto-filled server-side ("Dar" / "دار").
       description: v('description'),
       descriptionAr: v('descriptionAr'),
       categoryKey: v('categoryKey'),

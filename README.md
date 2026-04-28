@@ -74,7 +74,7 @@ public/
 
 | Email                     | Password               | Role     |
 | ------------------------- | ---------------------- | -------- |
-| admin@darcafeteria.com    | DarCafeteria11223344   | admin    |
+| admin@darcafeteria.com    | Darcafeteria11223344   | admin    |
 | admin@darcafeteria.qa     | admin123               | admin    |
 | guest@darcafeteria.qa     | guest123               | customer |
 
@@ -86,7 +86,7 @@ A self-contained web UI is bundled with the server. After seeding, open:
 http://localhost:3000/admin
 ```
 
-Sign in with **admin@darcafeteria.com / DarCafeteria11223344**. The panel is a
+Sign in with **admin@darcafeteria.com / Darcafeteria11223344**. The panel is a
 static SPA under `public/admin/` (Bootstrap 5 + vanilla JS) that consumes the
 same REST API. It lets an operator:
 
@@ -205,6 +205,46 @@ Order statuses: `Pending → Confirmed → Preparing → Ready → Delivered`, o
 | PATCH  | `/admin/users/:id`                       | Update user (name/phone/address/role/isActive) |
 | POST   | `/admin/users/:id/reset-password`        | Reset password             |
 | DELETE | `/admin/users/:id`                       | Delete user                |
+| GET    | `/admin/fcm-tokens`                      | Active device tokens, grouped by platform |
+| GET    | `/admin/notifications`                   | Recent push-notification audit log |
+| POST   | `/admin/notifications/send`              | Send a push (target = `all` / `user` / `token` / `topic`) |
+
+### Push notifications (FCM)
+
+The Android app registers its Firebase token with the backend so admins
+can target devices from the **Notifications** view in the admin panel.
+
+| Method | Path                  | Auth   | Description                       |
+| ------ | --------------------- | ------ | --------------------------------- |
+| POST   | `/users/fcm-token`    | Bearer | Upsert this device's token        |
+| DELETE | `/users/fcm-token`    | Bearer | Mark a token inactive (sign-out)  |
+
+**Backend setup**
+
+1. In the Firebase Console: **Project Settings → Service Accounts →
+   Generate new private key**. Save the resulting JSON somewhere safe
+   on the server (do **not** commit it).
+2. In `.env`, configure either:
+   ```
+   FIREBASE_SERVICE_ACCOUNT_PATH=/absolute/path/to/serviceAccount.json
+   ```
+   or the three inline fields (single-line, with literal `\n` in the
+   private key):
+   ```
+   FIREBASE_PROJECT_ID=dar-cafeteria
+   FIREBASE_CLIENT_EMAIL=firebase-adminsdk-...@dar-cafeteria.iam.gserviceaccount.com
+   FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
+   ```
+3. Restart the server. The `firebase-admin` SDK is initialised lazily —
+   the rest of the API works without these vars, but `/admin/notifications/send`
+   will refuse with a clear error message until they're set.
+
+**Sending from the admin panel**
+
+Open `http://localhost:3000/admin#/notifications`, choose an audience
+(everyone / a specific user / a topic / a single token), fill in the
+title + body, and hit **Send**. The audit log on the right shows every
+past send with success/failure counts pulled from FCM's response.
 
 ### Health
 | Method | Path        | Description       |
